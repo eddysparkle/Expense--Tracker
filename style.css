@@ -436,3 +436,178 @@ body.dark-mode .search-input {
 body.dark-mode .search-input::placeholder {
   color: #a1a1aa;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ========== Polished Expense Tracker ========== */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap");
+
+body {
+  font-family: "DM Sans", Arial, sans-serif;
+  background:
+    radial-gradient(circle at top right, rgba(124, 92, 255, 0.08), transparent 40%),
+    #f4f4f5;
+}
+
+.app-header h1 {
+  font-family: "Space Grotesk", Arial, sans-serif;
+  letter-spacing: -1px;
+}
+
+.eyebrow {
+  color: #7c5cff;
+}
+
+.balance-card {
+  background: linear-gradient(135deg, #18181b, #2a2a30);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.summary-card,
+.transaction-form,
+.transactions,
+.spending-section {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+#add-transaction {
+  background: linear-gradient(135deg, #7c5cff, #6d4aff);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#add-transaction:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(124, 92, 255, 0.35);
+}
+
+.form-message {
+  min-height: 20px;
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-message.error {
+  color: #dc2626;
+}
+
+.form-message.success {
+  color: #15803d;
+}
+
+.transaction {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.transaction-info {
+  flex: 1;
+}
+
+.transaction-info strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.transaction-info small {
+  color: #71717a;
+}
+
+.transaction.income .transaction-amount {
+  color: #15803d;
+  font-weight: 700;
+}
+
+.transaction.expense .transaction-amount {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.delete-transaction {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #f4f4f5;
+  color: #71717a;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.delete-transaction:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.category-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 90px;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.category-bar {
+  height: 8px;
+  background: #e4e4e7;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.category-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c5cff, #a78bfa);
+  border-radius: 99px;
+}
+
+.category-amount {
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Dark mode polish */
+body.dark-mode {
+  background: #0b0b0f;
+  color: #f4f4f5;
+}
+
+body.dark-mode .summary-card,
+body.dark-mode .transaction-form,
+body.dark-mode .transactions,
+body.dark-mode .spending-section {
+  background: #16161a;
+  border-color: #27272a;
+}
+
+body.dark-mode .transaction-form input,
+body.dark-mode .transaction-form select,
+body.dark-mode .search-input {
+  background: #0b0b0f;
+  border-color: #3f3f46;
+  color: #f4f4f5;
+}
