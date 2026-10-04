@@ -15,8 +15,7 @@ const themeToggle = document.querySelector("#theme-toggle");
 const searchInput = document.querySelector("#search-input");
 const formMessage = document.querySelector("#form-message");
 
-let transactions =
-  JSON.parse(localStorage.getItem("edialeTransactions")) || [];
+let transactions = JSON.parse(localStorage.getItem("edialeTransactions")) || [];
 
 // Default date to today
 if (dateInput && !dateInput.value) {
@@ -32,6 +31,7 @@ function formatMoney(amount) {
 
 function showFormMessage(text, isError) {
   if (!formMessage) return;
+
   formMessage.textContent = text;
   formMessage.className = isError ? "form-message error" : "form-message success";
 
@@ -44,8 +44,8 @@ function showFormMessage(text, isError) {
 }
 
 function updateSummary() {
-  let totalIncome = 0;
-  let totalExpenses = 0;
+  var totalIncome = 0;
+  var totalExpenses = 0;
 
   transactions.forEach(function (transaction) {
     if (transaction.type === "income") {
@@ -65,23 +65,23 @@ function saveTransactions() {
 }
 
 function updateTransactionCount() {
-  const count = transactions.length;
+  var count = transactions.length;
+
   transactionCount.textContent =
     count + (count === 1 ? " transaction" : " transactions");
-  emptyState.style.display = count === 0 ? "block" : "none";
+
+  if (emptyState) {
+    emptyState.style.display = count === 0 ? "block" : "none";
+  }
 }
 
-
-
-
 function createTransactionElement(transaction) {
-function createTransactionElement(transaction) {
-  const transactionItem = document.createElement("li");
+  var transactionItem = document.createElement("li");
   transactionItem.classList.add("transaction", transaction.type);
   transactionItem.dataset.id = transaction.id;
 
-  const sign = transaction.type === "income" ? "+" : "-";
-  const amountText = sign + formatMoney(transaction.amount);
+  var sign = transaction.type === "income" ? "+" : "-";
+  var amountText = sign + formatMoney(transaction.amount);
 
   transactionItem.innerHTML =
     '<div class="transaction-info">' +
@@ -96,7 +96,7 @@ function createTransactionElement(transaction) {
   transactionItem
     .querySelector(".delete-transaction")
     .addEventListener("click", function () {
-      const index = transactions.findIndex(function (item) {
+      var index = transactions.findIndex(function (item) {
         return item.id === transaction.id;
       });
 
@@ -112,14 +112,12 @@ function createTransactionElement(transaction) {
     });
 }
 
-
-
-                      
-
 function updateCategoryBreakdown() {
+  if (!categoryBreakdown) return;
+
   categoryBreakdown.innerHTML = "";
 
-  const expensesByCategory = {};
+  var expensesByCategory = {};
 
   transactions.forEach(function (transaction) {
     if (transaction.type === "expense") {
@@ -130,42 +128,40 @@ function updateCategoryBreakdown() {
     }
   });
 
-  const categories = Object.keys(expensesByCategory);
+  var categories = Object.keys(expensesByCategory);
 
   if (categories.length === 0) {
-    categoryBreakdown.innerHTML = `
-      <p class="breakdown-empty">
-        Add expenses to see your spending breakdown.
-      </p>
-    `;
+    categoryBreakdown.innerHTML =
+      '<p class="breakdown-empty">Add expenses to see your spending breakdown.</p>';
     return;
   }
 
-  const highestAmount = Math.max(...Object.values(expensesByCategory));
+  var highestAmount = Math.max.apply(null, Object.values(expensesByCategory));
 
   categories.forEach(function (category) {
-    const amount = expensesByCategory[category];
-    const percentage = (amount / highestAmount) * 100;
+    var amount = expensesByCategory[category];
+    var percentage = (amount / highestAmount) * 100;
 
-    const row = document.createElement("div");
+    var row = document.createElement("div");
     row.classList.add("category-row");
-    row.innerHTML = `
-      <span class="category-name">${category}</span>
-      <div class="category-bar">
-        <div class="category-fill" style="width: ${percentage}%"></div>
-      </div>
-      <span class="category-amount">${formatMoney(amount)}</span>
-    `;
+
+    row.innerHTML =
+      '<span class="category-name">' + category + "</span>" +
+      '<div class="category-bar">' +
+        '<div class="category-fill" style="width: ' + percentage + '%"></div>' +
+      "</div>" +
+      '<span class="category-amount">' + formatMoney(amount) + "</span>";
+
     categoryBreakdown.appendChild(row);
   });
 }
 
 function addTransaction() {
-  const description = descriptionInput.value.trim();
-  const amount = Number(amountInput.value);
-  const type = typeInput.value;
-  const category = categoryInput.value;
-  const date = dateInput.value;
+  var description = descriptionInput.value.trim();
+  var amount = Number(amountInput.value);
+  var type = typeInput.value;
+  var category = categoryInput.value;
+  var date = dateInput.value;
 
   if (description === "") {
     showFormMessage("Please enter a description.", true);
@@ -185,7 +181,7 @@ function addTransaction() {
     return;
   }
 
-  const transaction = {
+  var transaction = {
     id: Date.now(),
     description: description,
     amount: amount,
@@ -198,6 +194,7 @@ function addTransaction() {
   saveTransactions();
   createTransactionElement(transaction);
 
+  // Clear form fields
   descriptionInput.value = "";
   amountInput.value = "";
   dateInput.value = new Date().toISOString().split("T")[0];
@@ -208,23 +205,27 @@ function addTransaction() {
   showFormMessage("Transaction added successfully.", false);
 }
 
-addTransactionButton.addEventListener("click", addTransaction);
+if (addTransactionButton) {
+  addTransactionButton.addEventListener("click", addTransaction);
+}
 
-descriptionInput.addEventListener("keydown", function (event) {
-  if (event.key === "Enter") addTransaction();
-});
+if (descriptionInput) {
+  descriptionInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") addTransaction();
+  });
+}
 
-amountInput.addEventListener("keydown", function (event) {
-  if (event.key === "Enter") addTransaction();
-});
+if (amountInput) {
+  amountInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") addTransaction();
+  });
+}
 
 function loadTransactions() {
   transactionList.innerHTML = "";
 
-  const sortedTransactions = [...transactions].sort(function (a, b) {
-    return (
-      new Date(b.date + "T00:00:00") - new Date(a.date + "T00:00:00")
-    );
+  var sortedTransactions = transactions.slice().sort(function (a, b) {
+    return new Date(b.date + "T00:00:00") - new Date(a.date + "T00:00:00");
   });
 
   sortedTransactions.forEach(function (transaction) {
@@ -232,52 +233,57 @@ function loadTransactions() {
   });
 }
 
-// Theme
-const savedTheme = localStorage.getItem("edialeExpenseTheme");
+// Theme toggle
+if (themeToggle) {
+  var savedTheme = localStorage.getItem("edialeExpenseTheme");
 
-if (savedTheme === "dark") {
-  document.body.classList.add("dark-mode");
-  themeToggle.textContent = "☀️";
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark-mode");
+    themeToggle.textContent = "☀️";
+  }
+
+  themeToggle.addEventListener("click", function () {
+    document.body.classList.toggle("dark-mode");
+    var isDark = document.body.classList.contains("dark-mode");
+
+    if (isDark) {
+      themeToggle.textContent = "☀️";
+      localStorage.setItem("edialeExpenseTheme", "dark");
+    } else {
+      themeToggle.textContent = = "🌙";
+      localStorage.setItem("edialeExpenseTheme", "light");
+    }
+  });
 }
 
-themeToggle.addEventListener("click", function () {
-  document.body.classList.toggle("dark-mode");
-  const isDark = document.body.classList.contains("dark-mode");
-
-  if (isDark) {
-    themeToggle.textContent = "☀️";
-    localStorage.setItem("edialeExpenseTheme", "dark");
-  } else {
-    themeToggle.textContent = "🌙";
-    localStorage.setItem("edialeExpenseTheme", "light");
-  }
-});
-
 // Search
-searchInput.addEventListener("input", function () {
-  const searchTerm = searchInput.value.toLowerCase().trim();
-  const transactionElements = transactionList.querySelectorAll(".transaction");
+if (searchInput) {
+  searchInput.addEventListener("input", function () {
+    var searchTerm = searchInput.value.toLowerCase().trim();
+    var transactionElements = transactionList.querySelectorAll(".transaction");
 
-  transactionElements.forEach(function (transactionElement) {
-    const transactionId = Number(transactionElement.dataset.id);
-    const transaction = transactions.find(function (item) {
-      return item.id === transactionId;
+    transactionElements.forEach(function (transactionElement) {
+      var transactionId = Number(transactionElement.dataset.id);
+
+      var transaction = transactions.find(function (item) {
+        return item.id === transactionId;
+      });
+
+      if (!transaction) {
+        transactionElement.style.display = "none";
+        return;
+      }
+
+      var matches =
+        transaction.description.toLowerCase().includes(searchTerm) ||
+        transaction.category.toLowerCase().includes(searchTerm);
+
+      transactionElement.style.display = matches ? "flex" : "none";
     });
-
-    if (!transaction) {
-      transactionElement.style.display = "none";
-      return;
-    }
-
-    const matches =
-      transaction.description.toLowerCase().includes(searchTerm) ||
-      transaction.category.toLowerCase().includes(searchTerm);
-
-    transactionElement.style.display = matches ? "flex" : "none";
   });
-});
+}
 
-// Start
+// Start app
 loadTransactions();
 updateSummary();
 updateTransactionCount();
