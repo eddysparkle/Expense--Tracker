@@ -71,23 +71,25 @@ function updateTransactionCount() {
   emptyState.style.display = count === 0 ? "block" : "none";
 }
 
+
+
+
+function createTransactionElement(transaction) {
 function createTransactionElement(transaction) {
   const transactionItem = document.createElement("li");
   transactionItem.classList.add("transaction", transaction.type);
   transactionItem.dataset.id = transaction.id;
 
   const sign = transaction.type === "income" ? "+" : "-";
+  const amountText = sign + formatMoney(transaction.amount);
 
-  transactionItem.innerHTML = `
-    <div class="transaction-info">
-      <strong>${transaction.description}</strong>
-      <small>${transaction.category} • ${transaction.date}</small>
-    </div>
-    <span class="transaction-amount">
-      \( {sign} \){formatMoney(transaction.amount)}
-    </span>
-    <button class="delete-transaction" aria-label="Delete transaction">×</button>
-  `;
+  transactionItem.innerHTML =
+    '<div class="transaction-info">' +
+      "<strong>" + transaction.description + "</strong>" +
+      "<small>" + transaction.category + " • " + transaction.date + "</small>" +
+    "</div>" +
+    '<span class="transaction-amount">' + amountText + "</span>" +
+    '<button class="delete-transaction" aria-label="Delete transaction">×</button>';
 
   transactionList.appendChild(transactionItem);
 
@@ -109,6 +111,10 @@ function createTransactionElement(transaction) {
       updateCategoryBreakdown();
     });
 }
+
+
+
+                      
 
 function updateCategoryBreakdown() {
   categoryBreakdown.innerHTML = "";
