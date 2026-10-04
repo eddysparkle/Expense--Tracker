@@ -233,6 +233,9 @@ function loadTransactions() {
   });
 }
 
+
+
+
 // Theme toggle
 if (themeToggle) {
   var savedTheme = localStorage.getItem("edialeExpenseTheme");
@@ -250,11 +253,15 @@ if (themeToggle) {
       themeToggle.textContent = "☀️";
       localStorage.setItem("edialeExpenseTheme", "dark");
     } else {
-      themeToggle.textContent = = "🌙";
+      themeToggle.textContent = "🌙";
       localStorage.setItem("edialeExpenseTheme", "light");
     }
   });
 }
+
+
+
+
 
 // Search
 if (searchInput) {
